@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+requests
+PyMuPDF
+pytesseract
+Pillow
+psycopg2-binary
+python-multipart
