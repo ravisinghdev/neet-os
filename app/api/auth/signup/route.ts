@@ -1,27 +1,28 @@
-// ✅ Correct for App Router (app/api/auth/signup/route.ts)
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
 	try {
-		const body = await req.json();
-		const { email, password } = body;
+		const reqBody = await req.json();
+		const url = new URL(req.url);
+		const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+		const cookieStore = cookies();
+		const { email, password } = reqBody;
 
-		const supabase = createClient(); // No need for await if it's a sync factory
+		await supabase.auth.signUp({
+			email,
+			password,
+			options: {
+				emailRedirectTo: `${url.origin}/auth/fallback`,
+			},
+		});
 
-		const { data, error } = await (
-			await supabase
-		).auth.signUp({ email, password });
-
-		if (error) {
-			return NextResponse.json({ error: error.message }, { status: 400 });
-		}
-
+		return NextResponse.redirect(url);
+	} catch (error: any) {
 		return NextResponse.json(
-			{ message: "Signup successful", data },
-			{ status: 200 }
+			{ message: "Sign Up failed", error: error.message },
+			{ status: 501 }
 		);
-	} catch (err: any) {
-		return NextResponse.json({ error: err.message }, { status: 500 });
 	}
 }

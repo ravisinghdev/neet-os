@@ -26,7 +26,7 @@ export const useUserProfile = () => {
 					setLoading(false);
 					return;
 				} catch {
-					localStorage.removeItem(LOCAL_STORAGE_KEY); // Clean corrupted data
+					localStorage.removeItem(LOCAL_STORAGE_KEY);
 				}
 			}
 

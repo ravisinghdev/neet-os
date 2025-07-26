@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 type AuthContextType = {
 	user: any;
@@ -14,29 +15,20 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
+	const supabase = createClient();
 
 	useEffect(() => {
 		const initAuth = async () => {
-			// Get the current session
-			const { data: sessionData, error } = await supabase.auth.getSession();
-			if (error) {
-				console.error("Error getting session:", error);
+			const {
+				data: { session },
+				error,
+			} = await supabase.auth.getSession();
+
+			if (!session) {
+				console.log("No active session. User may not be logged in.");
 			}
-			setUser(sessionData?.session?.user ?? null);
-			setLoading(false);
 
-			// Subscribe to auth state changes
-			const { data: listener } = supabase.auth.onAuthStateChange(
-				(_event, session) => {
-					setUser(session?.user ?? null);
-					setLoading(false); // ✅ important!
-				}
-			);
-
-			// Cleanup
-			return () => {
-				listener.subscription.unsubscribe();
-			};
+			setUser(session?.user);
 		};
 
 		initAuth();

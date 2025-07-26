@@ -16,6 +16,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { createClient } from "@/lib/supabase/server";
 
 const fields = [
 	{ key: "name", label: "Name", placeholder: "Full Name", type: "text" },
@@ -41,6 +42,7 @@ const fields = [
 ];
 
 export function BasicInfo() {
+	const supabase = createClient();
 	const {
 		profile,
 		loading,
@@ -60,31 +62,46 @@ export function BasicInfo() {
 
 	const handleAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
-		if (!file || !profile?.id) return;
+		if (!file || !profile.id) return;
 
 		setUploading(true);
 		toast.loading("Uploading avatar...");
 
-		const formData = new FormData();
-		formData.append("file", file);
+		const fileExt = file.name.split(".").pop();
+		const filePath = `user-${profile.id}/avatar-${Date.now()}.${fileExt}`;
 
 		try {
-			const res = await fetch("/api/profile/update/avatar", {
-				method: "POST",
-				body: formData,
-			});
+			// 1. Upload to Supabase Storage
+			const { data: storageData, error: storageError } = await supabase.storage
+				.from("avatars")
+				.upload(filePath, file);
 
-			const data = await res.json();
-
-			if (!res.ok || data.error) {
-				throw new Error(data.error || "Avatar upload failed");
+			if (storageError) {
+				console.error("Storage error", storageError);
+				toast.error("Avatar upload failed");
+				return;
 			}
 
-			updateField("avatar_url", data.avatarPath);
-			toast.success("Avatar updated successfully!");
+			// 2. Insert avatar metadata into avatars table
+			const { error: dbError } = await supabase.from("avatars").insert({
+				user_id: profile.id,
+				file_path: filePath,
+				size_bytes: file.size,
+				content_type: file.type,
+			});
+
+			if (dbError) {
+				console.error("DB insert error", dbError);
+				toast.error("Failed to save avatar metadata");
+				return;
+			}
+
+			// 3. Update user profile with new avatar_url
+			updateField("avatar_url", filePath);
+			toast.success("Avatar updated!");
 		} catch (err) {
-			console.error(err);
-			toast.error("Avatar upload failed.");
+			console.error("Unexpected error", err);
+			toast.error("Something went wrong.");
 		} finally {
 			setUploading(false);
 			toast.dismiss();
@@ -156,13 +173,11 @@ export function BasicInfo() {
 							<img
 								src={
 									profile.avatar_url
-										? profile.avatar_url.startsWith("http")
-											? profile.avatar_url
-											: `https://${process.env.POSTGRES_HOST}.supabase.co/storage/v1/object/public/avatars/${profile.avatar_url}`
+										? `https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/avatars/${profile.avatar_url}`
 										: `https://api.dicebear.com/8.x/thumbs/svg?seed=${profile.name}`
 								}
 								alt="User Avatar"
-								className="w-28 h-28 rounded-full border-4 border-gradient-to-tr from-blue-500 via-pink-500 to-purple-500 shadow-lg"
+								className="w-28 h-28 rounded-full border-4 border-gradient-to-tr from-blue-500 via-pink-500 to-purple-500 shadow-lg object-cover"
 							/>
 						)}
 
@@ -229,6 +244,11 @@ export function BasicInfo() {
 					</div>
 				</div>
 			</div>
+			{uploading && (
+				<p className="text-xs text-blue-500 mt-1 animate-pulse">
+					Uploading avatar...
+				</p>
+			)}
 		</CardContainer>
 	);
 }

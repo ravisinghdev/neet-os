@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/supabase";
 import { Badge } from "@/components/ui/badge";
 import { ThemeSwitch } from "../Layout/ThemeSwitch";
+import Image from "next/image";
 
 export function Navbar() {
-	const { theme, setTheme } = useTheme();
 	const { user } = useAuth();
 	const { toggleSidebar } = useSidebar();
 	const [profile, setProfile] = useState<any>(null);
@@ -84,8 +84,17 @@ export function Navbar() {
 				</button>
 
 				{/* Avatar */}
-				<div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold shadow">
-					{initials}
+				<div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow">
+					{user?.avatar_url ? (
+						<Image
+							src={user?.avatar_url}
+							height={50}
+							width={50}
+							alt="User profile pic"
+						/>
+					) : (
+						initials
+					)}
 				</div>
 			</div>
 		</header>

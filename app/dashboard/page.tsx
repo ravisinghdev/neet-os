@@ -14,6 +14,7 @@ import { Sparkles, Rocket, NotebookPen, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 export default function DashboardPage() {
 	const router = useRouter();
@@ -23,7 +24,9 @@ export default function DashboardPage() {
 	const [goals, setGoals] = useState<string[]>([]);
 	const [goalModalOpen, setGoalModalOpen] = useState(false);
 
-	const { user } = useAuth();
+	// const { user } = useAuth();
+	const { profile } = useUserProfile();
+	// console.log(profile);
 	useEffect(() => {
 		async function loadData() {
 			// Fetch stats
@@ -81,7 +84,7 @@ export default function DashboardPage() {
 					transition={{ duration: 0.4 }}
 					className="text-3xl font-bold"
 				>
-					👋 Welcome back, {user?.user_metadata?.full_name}!
+					👋 Welcome back, {profile?.user_metadata?.full_name}!
 				</motion.h1>
 				<p className="text-muted-foreground">Let&apos;s make today count.</p>
 			</header>

@@ -39,6 +39,7 @@ export default function LoginPage() {
 					duration: 4000,
 				});
 				setError(res.data.error); // Optional: show under form input
+				console.log(error);
 				return;
 			}
 
@@ -50,6 +51,7 @@ export default function LoginPage() {
 			// Optional: Redirect to attempted route
 			const params = new URLSearchParams(window.location.search);
 			const redirectedFrom = params.get("redirectedFrom") || "/dashboard";
+			console.log(redirectedFrom);
 
 			setTimeout(() => {
 				router.replace(redirectedFrom);
@@ -68,6 +70,7 @@ export default function LoginPage() {
 			});
 
 			setError(message); // Optional UI form error
+			console.log(error);
 		} finally {
 			setTimeout(() => {
 				setIsLoading(false);
