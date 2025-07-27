@@ -97,8 +97,6 @@ export async function getTestAttemptsByUser(user_id: string) {
 	return data;
 }
 
-// 5. Submit a test attempt (update answers, score, status)
-// lib/test/attemptService.ts
 export async function submitTestAttempt(
 	attemptId: string,
 	answers: Record<string, number>
