@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 interface LogUserActivityProps {
 	user_id: string;
@@ -18,6 +18,8 @@ interface LogUserActivityProps {
 	user_agent?: string | null;
 	timestamp?: string;
 }
+
+const supabase = createClient();
 
 export async function logUserActivity({
 	user_id,

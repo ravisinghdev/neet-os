@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useAINow } from "@/hooks/ai/useAINow";
-import { supabase } from "@/lib/supabase/supabase";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { createClient } from "@/lib/supabase/server";
 
 export default function AINowHelper() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const { suggestion, loading, error, fetchNow } = useAINow();
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

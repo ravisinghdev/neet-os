@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/supabase";
 import AINowHelper from "@/components/ai/AINowHelper";
 import MotivationCard from "@/components/ai/MotivationCard";
 import GoalModal from "@/components/dashboard/GoalModal";
@@ -14,7 +13,8 @@ import { Sparkles, Rocket, NotebookPen, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { createClient } from "@/lib/supabase/server";
+import Spinner from "@/components/ui/spinner";
 
 export default function DashboardPage() {
 	const router = useRouter();
@@ -24,9 +24,8 @@ export default function DashboardPage() {
 	const [goals, setGoals] = useState<string[]>([]);
 	const [goalModalOpen, setGoalModalOpen] = useState(false);
 
-	// const { user } = useAuth();
-	const { profile } = useUserProfile();
-	// console.log(profile);
+	const supabase = createClient();
+	const { user } = useAuth();
 	useEffect(() => {
 		async function loadData() {
 			// Fetch stats
@@ -73,7 +72,18 @@ export default function DashboardPage() {
 		return count;
 	};
 
-	if (loading) return <div className="p-8 text-center">Loading dashboard…</div>;
+	if (loading)
+		return (
+			<div className="h-full w-full flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
+
+	if (!user) {
+		return (
+			<div className="h-full w-full text-center">Anonymous access denied!!</div>
+		);
+	}
 
 	return (
 		<div className="min-h-screen px-6 py-8 bg-background space-y-12">
@@ -84,7 +94,7 @@ export default function DashboardPage() {
 					transition={{ duration: 0.4 }}
 					className="text-3xl font-bold"
 				>
-					👋 Welcome back, {profile?.user_metadata?.full_name}!
+					👋 Welcome back, {user?.user_metadata?.full_name | user.email}!
 				</motion.h1>
 				<p className="text-muted-foreground">Let&apos;s make today count.</p>
 			</header>

@@ -92,8 +92,8 @@ yarn install
 Create a `.env.local` file:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
 GROQ_API_KEY=your_groq_api_key
 ```
 
@@ -167,4 +167,5 @@ Let me know if you'd like:
 
 Happy shipping 🚀
 ```
+
 # neet-os

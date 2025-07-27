@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 
 export default function StreakHeatmap() {
 	const [dates, setDates] = useState<string[]>([]);
+	const supabase = createClient();
 	useEffect(() => {
 		supabase
 			.from("user_activity")

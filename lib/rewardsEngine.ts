@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { logUserActivity } from "./user/userLogger";
 
 interface RewardInput {
@@ -7,6 +7,8 @@ interface RewardInput {
 	mode: "daily" | "custom";
 	resultId: string;
 }
+
+const supabase = createClient();
 
 export async function handleTestRewards({
 	userId,

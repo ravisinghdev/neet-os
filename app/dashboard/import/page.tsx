@@ -1,15 +1,6 @@
 "use client";
 
-import {
-	UploadCloud,
-	File,
-	Loader2,
-	BookOpen,
-	Brain,
-	Languages,
-	CheckCircle,
-	History,
-} from "lucide-react";
+import { UploadCloud, File, Loader2, Brain, History } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export default function ImportQuestionsPage() {

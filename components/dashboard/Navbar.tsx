@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { ThemeSwitch } from "../Layout/ThemeSwitch";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -26,6 +26,7 @@ export function Navbar() {
 	const { toggleSidebar } = useSidebar();
 	const [profileData, setProfileData] = useState<any>(null);
 	const initials = user?.email?.charAt(0).toUpperCase() ?? "U";
+	const supabase = createClient();
 
 	useEffect(() => {
 		const fetchProfile = async () => {

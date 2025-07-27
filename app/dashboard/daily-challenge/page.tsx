@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import {
 	Flame,
 	RefreshCcw,
@@ -34,6 +34,7 @@ export default function DailyChallengePage() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const [streak, setStreak] = useState<number>(0);
 	const [regenerating, setRegenerating] = useState(false);
+	const supabase = createClient();
 
 	const today = new Date().toISOString().slice(0, 10);
 

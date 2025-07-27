@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getUser } from "@/lib/auth/user";
 import { v4 as uuid } from "uuid";
 
 export async function POST(req: Request) {

@@ -2,11 +2,12 @@
 
 import { useAIPlanner } from "@/hooks/ai/useAIPlanner";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export default function TestPlanner() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const { plan, loading, error, fetchPlan } = useAIPlanner();
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

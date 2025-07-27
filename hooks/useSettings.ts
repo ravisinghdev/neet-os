@@ -1,9 +1,9 @@
-// hooks/useSettings.ts
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = "user-settings";
+const supabase = createClient();
 
 export const useSettings = () => {
 	const [original, setOriginal] = useState<any>(null); // original values

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAIPlanner } from "@/hooks/ai/useAIPlanner";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 export default function SmartPlanner() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const { plan, loading, error, fetchPlan } = useAIPlanner();
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

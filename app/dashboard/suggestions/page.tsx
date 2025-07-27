@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Sparkles, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
@@ -20,6 +20,7 @@ interface AISuggestion {
 export default function AISuggestionsPage() {
 	const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
 	const [loading, setLoading] = useState(false);
+	const supabase = createClient();
 
 	const fetchSuggestions = async () => {
 		setLoading(true);

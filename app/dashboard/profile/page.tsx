@@ -8,7 +8,6 @@ import { ProfileStats } from "@/components/profile/ProfileStats";
 import { ProfileGoals } from "@/components/profile/ProfileGoals";
 import { ProfilePreferences } from "@/components/profile/ProfilePreference";
 import { ProfileAISettings } from "@/components/profile/ProfileAISettings";
-import { ProfileSaveActions } from "@/components/profile/ProfileSaveAction";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pencil, Save, Undo2, XCircle } from "lucide-react";
@@ -32,8 +31,19 @@ export default function ProfilePage() {
 	const { user } = useAuth();
 
 	if (loading || !profile) {
-		return <div className="text-muted-foreground">Loading profile...</div>;
+		return (
+			<div className="w-full h-full flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
 	}
+	if (!user) {
+		// Handle unauthenticated state
+		return <p>User not logged in</p>;
+	}
+
+	const name = user.user_metadata?.full_name ?? "Guest";
+	const email = user.user_metadata?.email ?? "";
 
 	return (
 		<div className="space-y-8 pb-20">
@@ -96,7 +106,7 @@ export default function ProfilePage() {
 					<ProfileField
 						label="Name"
 						field="name"
-						value={user.user_metadata.full_name}
+						value={name}
 						editMode={editMode}
 						onChange={updateField}
 						isChanged={isFieldChanged("name")}
@@ -105,7 +115,7 @@ export default function ProfilePage() {
 					<ProfileField
 						label="Email"
 						field="email"
-						value={user.user_metadata.email}
+						value={email}
 						editMode={false}
 						onChange={() => {}}
 						type="email"
@@ -122,7 +132,10 @@ export default function ProfilePage() {
 					<ProfileField
 						label="Gender"
 						field="gender"
-						value={profile.gender}
+						value={
+							profile.gender.slice(0, 1).toUpperCase() +
+							profile.gender.slice(1).toLowerCase()
+						}
 						editMode={editMode}
 						onChange={updateField}
 						isChanged={isFieldChanged("gender")}

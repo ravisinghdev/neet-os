@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { toast } from "sonner";
 
 interface GoalModalProps {
@@ -22,6 +22,7 @@ interface GoalModalProps {
 export default function GoalModal({ open, onClose }: GoalModalProps) {
 	const [newGoal, setNewGoal] = useState("");
 	const [loading, setLoading] = useState(false);
+	const supabase = createClient();
 
 	const handleAddGoal = async () => {
 		if (!newGoal.trim()) return;

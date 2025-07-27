@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { useAuth } from "@/context/AuthContext";
 import {
 	Brain,
@@ -47,6 +47,7 @@ export default function StudyPlanPage() {
 		new Date().toISOString().slice(0, 10)
 	);
 	const [showAll, setShowAll] = useState(false);
+	const supabase = createClient();
 
 	const subjectColors: Record<string, string> = {
 		Physics: "text-purple-600",

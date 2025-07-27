@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAISuggestions } from "@/hooks/ai/useAISuggestions";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 export default function AISuggestions() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const { suggestions, loading, error, fetchSuggestions } = useAISuggestions();
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

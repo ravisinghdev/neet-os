@@ -1,4 +1,3 @@
-// app/upload/page.tsx
 "use client";
 import UploadForm from "@/components/UploadForm";
 

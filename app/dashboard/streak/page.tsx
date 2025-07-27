@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { CalendarDays, Flame, Award } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -14,6 +14,7 @@ export default function StreakCalendarPage() {
 	const [days, setDays] = useState<DayStatus[]>([]);
 	const [currentStreak, setCurrentStreak] = useState(0);
 	const [longestStreak, setLongestStreak] = useState(0);
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

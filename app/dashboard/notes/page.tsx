@@ -21,7 +21,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
 import Spinner from "@/components/ui/spinner"; // Optional loading spinner
@@ -50,8 +50,8 @@ export default function MyNotesPage() {
 	const [subjects, setSubjects] = useState<string[]>([]);
 	const [chapters, setChapters] = useState<string[]>([]);
 	const [notes, setNotes] = useState<Note[]>([]);
-	// const [userId, setUserId] = useState<string>(profile.id);
 	const [isLoading, setIsLoading] = useState(false);
+	const supabase = createClient();
 
 	// Load subjects
 	useEffect(() => {

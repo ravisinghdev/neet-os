@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/supabase";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Spinner from "@/components/ui/spinner";
 import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/server";
 
 export default function RegisterPage() {
 	const router = useRouter();
@@ -18,6 +18,7 @@ export default function RegisterPage() {
 	const [submitted, setSubmitted] = useState(false);
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const supabase = createClient();
 
 	const handleRegister = async () => {
 		try {

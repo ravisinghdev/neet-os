@@ -1,7 +1,7 @@
 // components/UploadForm.tsx
 "use client";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export default function UploadForm() {
 	const [jsonText, setJsonText] = useState("");

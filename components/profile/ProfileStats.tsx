@@ -26,7 +26,10 @@ export const ProfileStats = () => {
 			<ProfileField
 				label="Gender"
 				field="gender"
-				value={profile?.gender}
+				value={
+					profile.gender.slice(0, 1).toUpperCase() +
+					profile.gender.slice(1).toLowerCase()
+				}
 				editMode={editMode}
 				isChanged={isFieldChanged("gender")}
 				onChange={updateField}

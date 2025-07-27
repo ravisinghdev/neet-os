@@ -1,4 +1,3 @@
-// app/test/_components/modes.ts
 export type FieldConfig = {
 	label: string;
 	placeholder?: string;

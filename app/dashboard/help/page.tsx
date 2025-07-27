@@ -1,14 +1,6 @@
 "use client";
 
-import {
-	MessageCircle,
-	Bug,
-	Lightbulb,
-	AlertCircle,
-	UploadCloud,
-	Loader2,
-	Mail,
-} from "lucide-react";
+import { MessageCircle, Loader2, Mail } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

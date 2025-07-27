@@ -22,11 +22,12 @@ import {
 	ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { LightningBoltIcon } from "@radix-ui/react-icons";
 import { useSidebar } from "@/context/SidebarContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "../ui/button";
 
 const navGroups = [
 	{
@@ -83,6 +84,7 @@ export function Sidebar() {
 	const pathname = usePathname();
 	const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
 	const { isSidebarOpen, closeSidebar } = useSidebar();
+	const supabase = createClient();
 
 	const toggleGroup = (title: string) => {
 		setCollapsedGroups((prev) =>
@@ -156,6 +158,7 @@ function SidebarBody({
 	toggleGroup: (title: string) => void;
 	collapsedGroups: string[];
 }) {
+	const supabase = createClient();
 	return (
 		<>
 			<nav className="space-y-4">
@@ -195,13 +198,13 @@ function SidebarBody({
 				))}
 			</nav>
 
-			<button
+			<Button
 				onClick={() => supabase.auth.signOut()}
 				className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive mt-6"
 			>
 				<LogOut size={18} />
 				Logout
-			</button>
+			</Button>
 		</>
 	);
 }

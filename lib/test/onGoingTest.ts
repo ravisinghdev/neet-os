@@ -1,4 +1,6 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
+
+const supabase = createClient();
 
 export async function getOngoingTest(userId: string) {
 	const { data, error } = await supabase

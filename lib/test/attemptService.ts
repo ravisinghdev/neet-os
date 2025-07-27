@@ -1,10 +1,12 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Database } from "@/types/supabase";
 
 type TestAttempt = Database["public"]["Tables"]["test_attempts"]["Row"];
 type NewTestAttempt = Database["public"]["Tables"]["test_attempts"]["Insert"];
 type UpdateTestAttempt =
 	Database["public"]["Tables"]["test_attempts"]["Update"];
+
+const supabase = createClient();
 
 // 1. Start a new test attempt
 export async function startTestAttempt(data: NewTestAttempt) {

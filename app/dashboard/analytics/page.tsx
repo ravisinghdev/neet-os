@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, Percent, ListChecks, BarChart2, Brain } from "lucide-react";
 
@@ -38,6 +38,7 @@ type StudyLog = {
 export default function AnalyticsPage() {
 	const [stats, setStats] = useState<any>(null);
 	const [testResults, setTestResults] = useState<TestResult[]>([]);
+	const supabase = createClient();
 
 	const [aiInsight, setAiInsight] = useState<string>(
 		"Generating AI Insight..."

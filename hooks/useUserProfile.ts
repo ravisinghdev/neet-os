@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = "user-profile";
+const supabase = createClient();
 
 export const useUserProfile = () => {
 	const [profile, setProfile] = useState<any>(null);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Progress } from "@/components/ui/progress";
 import { Target, CalendarDays, CheckCircle2, Clock10 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -16,6 +16,7 @@ interface Goal {
 
 export default function GoalTrackerPage() {
 	const [goals, setGoals] = useState<Goal[]>([]);
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

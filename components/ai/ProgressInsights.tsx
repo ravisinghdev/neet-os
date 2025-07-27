@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAIAnalyzer } from "@/hooks/ai/useAIAnalyzer";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 export default function ProgressInsights() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const { analysis, loading, error, fetchAnalysis } = useAIAnalyzer();
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {

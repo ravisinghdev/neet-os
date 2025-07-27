@@ -15,7 +15,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeSwitch } from "./ThemeSwitch";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { useAuth } from "@/context/AuthContext";
 
 interface NavbarLink {

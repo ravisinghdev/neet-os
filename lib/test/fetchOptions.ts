@@ -1,4 +1,6 @@
-import { supabase } from "../supabase/supabase";
+import { createClient } from "../supabase/server";
+
+const supabase = createClient();
 
 // Fetch all distinct subjects from chapters table
 export const getAllSubjects = async (): Promise<string[]> => {

@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/server";
-import { useUserProfile } from "@/hooks/useUserProfile";
 
 type AuthContextType = {
 	user: any;
@@ -21,7 +20,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		const initAuth = async () => {
 			const {
 				data: { session },
-				error,
 			} = await supabase.auth.getSession();
 
 			if (!session) {
@@ -29,6 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			}
 
 			setUser(session?.user);
+			console.log(session?.user);
 		};
 
 		initAuth();

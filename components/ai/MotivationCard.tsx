@@ -29,17 +29,6 @@ export default function MotivationCard() {
 			<p className="text-muted-foreground text-sm">
 				Get a quote based on your current mood
 			</p>
-
-			{/* <select
-				className="w-full border rounded px-3 py-2 text-sm"
-				value={mood}
-				onChange={(e) => setMood(e.target.value)}
-			>
-				<option value="tired">Tired</option>
-				<option value="frustrated">Frustrated</option>
-				<option value="motivated">Motivated</option>
-				<option value="bored">Bored</option>
-			</select> */}
 			<Select onValueChange={(e) => setMood(e)}>
 				<SelectTrigger className="w-[180px]">
 					<SelectValue placeholder="Select your mood" />

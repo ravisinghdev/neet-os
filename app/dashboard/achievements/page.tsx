@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Trophy } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -17,6 +17,7 @@ interface Achievement {
 
 export default function AchievementsPage() {
 	const [achievements, setAchievements] = useState<Achievement[]>([]);
+	const supabase = createClient();
 
 	useEffect(() => {
 		(async () => {
