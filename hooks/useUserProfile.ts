@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/supabase";
+import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = "user-profile";
 
@@ -21,11 +22,13 @@ export const useUserProfile = () => {
 			if (cached) {
 				try {
 					const parsed = JSON.parse(cached);
+					console.log("[Profile] Loaded from localStorage ✅");
 					setProfile(parsed);
 					setOriginalProfile(parsed);
 					setLoading(false);
 					return;
 				} catch {
+					console.warn("[Profile] Failed to parse cached profile ⚠️");
 					localStorage.removeItem(LOCAL_STORAGE_KEY);
 				}
 			}
@@ -33,20 +36,39 @@ export const useUserProfile = () => {
 			// Fallback to fetching from Supabase
 			const {
 				data: { session },
+				error: sessionError,
 			} = await supabase.auth.getSession();
-			const userId = session?.user?.id;
-			if (!userId) {
+			if (sessionError) {
+				console.error(
+					"[Profile] Failed to get Supabase session ❌",
+					sessionError
+				);
+				toast.error("Failed to load user session");
 				setLoading(false);
 				return;
 			}
 
-			console.log("Loading profile for user:", userId);
+			const userId = session?.user?.id;
+			if (!userId) {
+				console.warn("[Profile] No user session found ❌");
+				setLoading(false);
+				return;
+			}
 
-			const { data } = await supabase
+			console.log("[Profile] Fetching profile for user ID:", userId);
+
+			const { data, error } = await supabase
 				.from("profiles")
 				.select("*")
 				.eq("id", userId)
 				.maybeSingle();
+
+			if (error) {
+				console.error("[Profile] Error loading profile ❌", error);
+				toast.error("Something went wrong while loading your profile.");
+				setLoading(false);
+				return;
+			}
 
 			if (!data) {
 				const defaultProfile = { id: userId, name: "", gender: "", age: 17 };
@@ -54,10 +76,12 @@ export const useUserProfile = () => {
 				setProfile(defaultProfile);
 				setOriginalProfile(defaultProfile);
 				localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultProfile));
+				console.log("[Profile] Created default profile for new user ✅");
 			} else {
 				setProfile(data);
 				setOriginalProfile(data);
 				localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+				console.log("[Profile] Loaded profile from Supabase ✅");
 			}
 
 			setLoading(false);
@@ -68,30 +92,40 @@ export const useUserProfile = () => {
 
 	const updateField = (key: string, value: any) => {
 		setProfile((prev: any) => ({ ...prev, [key]: value }));
+		console.log(`[Profile] Updated field "${key}" to:`, value);
 	};
 
 	const saveAll = async () => {
 		if (!profile) return;
 		setSaving(true);
+		console.log("[Profile] Saving profile changes...");
+
 		const { error } = await supabase.from("profiles").upsert(profile);
-		if (!error) {
+
+		if (error) {
+			console.error("[Profile] Failed to save profile ❌", error);
+			toast.error("Something went wrong while saving your profile.");
+		} else {
 			setOriginalProfile(profile);
 			localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
+			console.log("[Profile] Profile saved successfully ✅");
+			toast.success("Your profile was successfully updated.");
 		}
+
 		setSaving(false);
 		return error;
 	};
 
 	const resetChanges = () => {
 		setProfile(originalProfile);
+		console.log("[Profile] Reset profile to original values 🔄");
+		toast.info("Changes reverted.");
 	};
 
-	// ✅ New: detect if specific field changed
 	const isFieldChanged = (key: string) => {
 		return profile?.[key] !== originalProfile?.[key];
 	};
 
-	// ✅ New: detect if any field changed
 	const isDirty = () => {
 		if (!profile || !originalProfile) return false;
 		return Object.keys(profile).some(

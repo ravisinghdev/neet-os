@@ -25,7 +25,7 @@ export default function GlassCard({
 			onClick={onClick}
 			className={cn(
 				"rounded-2xl border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 p-5",
-				"backdrop-blur-md bg-white/10 dark:bg-white/5",
+				"backdrop-blur-md",
 				"cursor-pointer", // make it look clickable
 				className
 			)}
