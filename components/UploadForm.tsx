@@ -1,4 +1,3 @@
-// components/UploadForm.tsx
 "use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/server";
@@ -6,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 export default function UploadForm() {
 	const [jsonText, setJsonText] = useState("");
 	const [status, setStatus] = useState("");
+	const supabase = createClient();
 
 	const handleUpload = async () => {
 		try {
