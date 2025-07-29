@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AINowHelper from "@/components/ai/AINowHelper";
 import MotivationCard from "@/components/ai/MotivationCard";
@@ -9,68 +9,20 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import StudyCalendar from "@/components/dashboard/StudyCalendar";
-import { Sparkles, Rocket, NotebookPen, BarChart3 } from "lucide-react";
-import { toast } from "sonner";
+import { Rocket, NotebookPen, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { createClient } from "@/lib/supabase/server";
 import Spinner from "@/components/ui/spinner";
 
 export default function DashboardPage() {
 	const router = useRouter();
 
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [stats, setStats] = useState({ accuracy: 0, tests: 0, streak: 0 });
 	const [goals, setGoals] = useState<string[]>([]);
 	const [goalModalOpen, setGoalModalOpen] = useState(false);
 
-	const supabase = createClient();
 	const { user } = useAuth();
-	useEffect(() => {
-		async function loadData() {
-			// Fetch stats
-			const [{ data: tests }, { data: activity }, { data: goalsData }] =
-				await Promise.all([
-					supabase
-						.from("test_results")
-						.select("score, accuracy")
-						.order("created_at", { ascending: false })
-						.limit(30),
-					supabase
-						.from("user_activity")
-						.select("date")
-						.order("date", { ascending: false })
-						.limit(30),
-					supabase.from("goals").select("goal"),
-				]);
-
-			const total = tests?.length || 0;
-			const avgAcc = total
-				? Math.round(
-						tests!.reduce((sum, t) => sum + (t.accuracy ?? 0), 0) / total
-					)
-				: 0;
-			const streak = calculateStreak(activity?.map((a) => a.date || "") || []);
-
-			setStats({ accuracy: avgAcc, tests: total, streak });
-			setGoals(goalsData?.map((g) => g.goal) || []);
-			setLoading(false);
-		}
-
-		loadData();
-	}, []);
-
-	const calculateStreak = (dates: string[]) => {
-		const today = new Date().toDateString();
-		const setDates = new Set(dates.map((d) => new Date(d).toDateString()));
-		let count = 0,
-			day = new Date();
-		while (setDates.has(day.toDateString())) {
-			count++;
-			day.setDate(day.getDate() - 1);
-		}
-		return count;
-	};
 
 	if (loading)
 		return (
@@ -94,7 +46,7 @@ export default function DashboardPage() {
 					transition={{ duration: 0.4 }}
 					className="text-3xl font-bold"
 				>
-					👋 Welcome back, {user?.user_metadata?.full_name | user.email}!
+					👋 Welcome back, {user?.user_metadata?.full_name}!
 				</motion.h1>
 				<p className="text-muted-foreground">Let&apos;s make today count.</p>
 			</header>

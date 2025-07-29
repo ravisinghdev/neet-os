@@ -36,33 +36,39 @@ export default function FooterSection({
 	name = "NEET OS",
 	columns = [
 		{
-			title: "Product",
+			title: "Study Tools",
 			links: [
-				{ text: "Changelog", href: "/" },
-				{ text: "Documentation", href: "/" },
+				{ text: "Question Bank", href: "/dashboard/questions" },
+				{ text: "Timed Tests", href: "/dashboard/tests" },
+				{ text: "Daily Challenges", href: "/dashboard/daily" },
+				{ text: "Smart Notes", href: "/dashboard/notes" },
+				{ text: "AI Doubt Solver", href: "/dashboard/ai" },
 			],
 		},
 		{
 			title: "Company",
 			links: [
-				{ text: "About", href: "/" },
-				{ text: "Careers", href: "/" },
-				{ text: "Blog", href: "/" },
+				{ text: "About NEET OS", href: "/about" },
+				{ text: "Our Mission", href: "/mission" },
+				{ text: "Careers", href: "/careers" },
+				{ text: "Blog", href: "/blog" },
 			],
 		},
 		{
-			title: "Contact",
+			title: "Support",
 			links: [
-				{ text: "Discord", href: "/" },
-				{ text: "Twitter", href: "/" },
-				{ text: "Github", href: "/" },
+				{ text: "Help Center", href: "/help" },
+				{ text: "Contact Us", href: "/contact" },
+				{ text: "Community Discord", href: "https://discord.gg/neetos" },
+				{ text: "System Status", href: "/status" },
 			],
 		},
 	],
-	copyright = "Made with 🧠 by NEET OS • 2025 • ©  All rights reserved",
+	copyright = "© 2025 NEET OS • Empowering NEET Aspirants with AI 🚀 | All rights reserved",
 	policies = [
-		{ text: "Privacy Policy", href: "/" },
-		{ text: "Terms of Service", href: "/" },
+		{ text: "Privacy Policy", href: "/privacy" },
+		{ text: "Terms of Service", href: "/terms" },
+		{ text: "Refund Policy", href: "/refunds" },
 	],
 	showModeToggle = true,
 	className,
@@ -73,11 +79,17 @@ export default function FooterSection({
 				<Footer>
 					<FooterContent>
 						<FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1">
-							<div className="flex items-center gap-2">
-								{logo}
-								<h3 className="text-xl font-bold">{name}</h3>
+							<div className="flex flex-col gap-2">
+								<div className="flex items-center gap-2">
+									{logo}
+									<h3 className="text-xl font-bold">{name}</h3>
+								</div>
+								<p className="text-sm text-muted-foreground max-w-xs">
+									India's smartest NEET preparation platform.
+								</p>
 							</div>
 						</FooterColumn>
+
 						{columns.map((column, index) => (
 							<FooterColumn key={index}>
 								<h3 className="text-md pt-1 font-semibold">{column.title}</h3>
@@ -85,7 +97,7 @@ export default function FooterSection({
 									<a
 										key={linkIndex}
 										href={link.href}
-										className="text-muted-foreground text-sm"
+										className="text-muted-foreground text-sm hover:underline"
 									>
 										{link.text}
 									</a>
@@ -93,11 +105,12 @@ export default function FooterSection({
 							</FooterColumn>
 						))}
 					</FooterContent>
+
 					<FooterBottom>
-						<div>{copyright}</div>
-						<div className="flex items-center gap-4">
+						<div className="text-sm text-muted-foreground">{copyright}</div>
+						<div className="flex items-center gap-4 text-sm">
 							{policies.map((policy, index) => (
-								<a key={index} href={policy.href}>
+								<a key={index} href={policy.href} className="hover:underline">
 									{policy.text}
 								</a>
 							))}

@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/item";
 import { Section } from "@/components/ui/section";
 import CTA from "@/components/Home/CTA";
+import { useAuth } from "@/context/AuthContext";
 
 interface Item {
 	title: string;
@@ -93,6 +94,7 @@ export default function Home({
 	],
 	className,
 }: ItemsProps) {
+	const { isLoggedIn } = useAuth();
 	return (
 		<main className="relative w-full min-h-screen overflow-hidden text-foreground">
 			{/* === HERO SECTION === */}
@@ -123,7 +125,7 @@ export default function Home({
 					transition={{ delay: 0.8 }}
 				>
 					<Button asChild size="lg">
-						<Link href="/practice">
+						<Link href={isLoggedIn ? "/dashboard" : "/auth/login"}>
 							<Flame className="mr-2 h-4 w-4" /> Start Practice
 						</Link>
 					</Button>
